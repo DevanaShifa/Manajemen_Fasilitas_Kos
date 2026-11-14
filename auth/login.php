@@ -80,5 +80,7 @@ $pesan = isset($_GET['pesan']) ? $_GET['pesan'] : "";
             document.getElementById("tautanDaftar").style.display = (peran == "admin") ? "none" : "block";
         }
     </script>
+
+    <script src="../assets/js/script.js"></script>
 </body>
 </html>

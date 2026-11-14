@@ -5,7 +5,7 @@ include "../includes/koneksi.php";
 
 // ini kaya data admin pertama. terus ganti passwordnya kalo udah login
 $nama = "Administrator";
-$email = "admin@kos.com";
+$email = "adminkos@gmail.com";
 $kata_sandi_asli = "admin123";
 
 

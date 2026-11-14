@@ -6,7 +6,7 @@
 :root {
     --warna-utama: #1f4e5f;        /* biru kehijauan tua, warna papan nama kos */
     --warna-utama-gelap: #163a47;
-    --warna-aksen: #e8a317;        /* kuning, untuk penanda menu aktif */
+    --warna-aksen: #e8a317;        /* kuning, untuk penanda dan sorotan */
     --warna-latar: #eef1ee;
     --warna-panel: #ffffff;
     --warna-teks: #20262e;
@@ -14,6 +14,7 @@
     --warna-garis: #d3d9d3;
     --warna-bahaya: #b3261e;
     --warna-sukses: #1e7a46;
+    --bayangan-angkat: 0 8px 20px rgba(31, 78, 95, 0.16);
 }
 
 * { box-sizing: border-box; }
@@ -31,29 +32,37 @@ a { color: var(--warna-utama); }
 h1 { font-size: 24px; margin: 0 0 4px; }
 h2 { font-size: 17px; margin: 0 0 12px; }
 
-/* ---------- Bar atas (header) ---------- */
+/* ---------- Bar atas (menempel di atas layar saat digulir) ---------- */
 .bar-atas {
+    position: sticky;
+    top: 0;
+    z-index: 50;
     background: var(--warna-utama);
     color: #fff;
     padding: 0 24px;
     min-height: 58px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
+    gap: 24px;
+    transition: box-shadow 0.2s;
 }
-.bar-kiri, .bar-kanan { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.bar-atas.bergulir { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25); }
 .merek { font-size: 19px; font-weight: 700; letter-spacing: 0.2px; }
+
+/* Bagian yang ikut terlipat di HP: menu + nama pengguna */
+.lipatan { display: flex; flex: 1; align-items: center; justify-content: space-between; gap: 16px; }
 .menu { display: flex; gap: 4px; }
 .menu a {
     color: #dce8ec;
     text-decoration: none;
     padding: 17px 12px 14px;
     border-bottom: 3px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
 }
-.menu a:hover { color: #fff; }
+.menu a:hover { color: #fff; border-bottom-color: rgba(255, 255, 255, 0.45); }
 .menu a.aktif { color: #fff; border-bottom-color: var(--warna-aksen); }
+
+.bar-kanan { display: flex; align-items: center; gap: 14px; }
 .nama-pengguna { font-size: 14px; color: #dce8ec; }
 .tombol-keluar {
     color: #fff;
@@ -62,14 +71,28 @@ h2 { font-size: 17px; margin: 0 0 12px; }
     padding: 5px 14px;
     border: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: 6px;
+    transition: background 0.15s;
 }
-.tombol-keluar:hover { background: rgba(255, 255, 255, 0.15); }
+.tombol-keluar:hover { background: rgba(255, 255, 255, 0.18); }
+
+/* Tombol hamburger, hanya tampil di HP */
+.tombol-menu {
+    display: none;
+    margin-left: auto;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    color: #fff;
+    border-radius: 6px;
+    font-size: 18px;
+    padding: 2px 11px;
+    cursor: pointer;
+}
 
 /* ---------- Isi halaman dan footer ---------- */
 .isi {
     max-width: 1020px;
     margin: 0 auto;
-    padding: 28px 16px 40px;
+    padding: 24px 16px 40px;
     min-height: calc(100vh - 58px - 62px);
 }
 .keterangan { margin: 0 0 22px; color: var(--warna-teks-redup); }
@@ -81,26 +104,88 @@ h2 { font-size: 17px; margin: 0 0 12px; }
     border-top: 1px solid var(--warna-garis);
 }
 
-/* ---------- Ringkasan angka: satu panel, dibagi garis tegak ---------- */
+/* ---------- Banner sambutan di dashboard ---------- */
+.sambutan {
+    position: relative;
+    overflow: hidden;
+    background: var(--warna-utama);
+    color: #fff;
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+.sambutan::after {              /* lingkaran kuning sebagai hiasan */
+    content: "";
+    position: absolute;
+    right: -40px;
+    bottom: -70px;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    background: var(--warna-aksen);
+    opacity: 0.22;
+}
+.sambutan h1 { color: #fff; }
+.sambutan p { margin: 0; color: #dce8ec; }
+.sambutan-ikon { font-size: 46px; position: relative; z-index: 1; }
+.chip-peringatan {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 3px 13px;
+    border-radius: 20px;
+    background: var(--warna-aksen);
+    color: #3d2a00;
+    font-size: 13.5px;
+    font-weight: 600;
+}
+
+/* ---------- Kartu ringkasan angka ---------- */
 .ringkasan {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    background: var(--warna-panel);
-    border: 1px solid var(--warna-garis);
-    border-radius: 6px;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
     margin-bottom: 24px;
 }
-.ringkasan-item { padding: 16px 18px; border-left: 1px solid var(--warna-garis); }
-.ringkasan-item:first-child { border-left: none; }
-.ringkasan-angka { font-size: 30px; font-weight: 700; line-height: 1.1; }
+.ringkasan-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--warna-panel);
+    border: 1px solid var(--warna-garis);
+    border-left: 4px solid var(--warna-utama);
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: transform 0.18s, box-shadow 0.18s;
+}
+.ringkasan-item:hover { transform: translateY(-3px); box-shadow: var(--bayangan-angkat); }
+.ikon {
+    flex: none;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #e3eeee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+.ringkasan-angka { font-size: 28px; font-weight: 700; line-height: 1.1; }
 .ringkasan-label { font-size: 14px; color: var(--warna-teks-redup); }
+
+/* Kartu yang butuh perhatian admin (angkanya lebih dari 0) */
+.ringkasan-item.perlu-perhatian { border-left-color: var(--warna-bahaya); }
+.ringkasan-item.perlu-perhatian .ikon { background: #f8dcda; }
 .ringkasan-item.perlu-perhatian .ringkasan-angka { color: var(--warna-bahaya); }
 
 /* ---------- Panel isi ---------- */
 .panel {
     background: var(--warna-panel);
     border: 1px solid var(--warna-garis);
-    border-radius: 6px;
+    border-radius: 10px;
     padding: 18px 20px;
     margin-bottom: 20px;
 }
@@ -109,9 +194,12 @@ h2 { font-size: 17px; margin: 0 0 12px; }
 /* ---------- Tabel ---------- */
 .bungkus-tabel { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--warna-garis); }
+th, td { text-align: left; padding: 10px 10px; border-bottom: 1px solid var(--warna-garis); }
 th { font-weight: 600; color: var(--warna-teks-redup); }
 tr:last-child td { border-bottom: none; }
+tr.baris-data td { transition: background 0.12s; }
+tr.baris-data:hover td { background: #eef5f2; }
+input.cari-tabel { max-width: 300px; margin: 0 0 12px; }
 
 /* ---------- Lencana status ---------- */
 .lencana {
@@ -126,6 +214,10 @@ tr:last-child td { border-bottom: none; }
 .lencana-selesai, .lencana-lunas        { background: #d7efe0; color: #165c35; }
 .lencana-ditolak, .lencana-telat        { background: #f8dcda; color: #8a1d17; }
 
+.lencana-baik      { background: #d7efe0; color: #165c35; }
+.lencana-rusak     { background: #f8dcda; color: #8a1d17; }
+.lencana-perbaikan { background: #fdf0cc; color: #7a5200; }
+
 /* ---------- Formulir (dipakai juga di halaman login) ---------- */
 label { display: block; font-size: 14px; color: var(--warna-teks-redup); margin-top: 10px; }
 input[type="text"], input[type="email"], input[type="password"],
@@ -138,11 +230,12 @@ input[type="number"], input[type="date"], select, textarea {
     font-size: 15px;
     font-family: inherit;
     background: #fff;
+    transition: border-color 0.15s, box-shadow 0.15s;
 }
 input:focus, select:focus, textarea:focus {
-    outline: 2px solid var(--warna-aksen);
-    outline-offset: 1px;
+    outline: none;
     border-color: var(--warna-utama);
+    box-shadow: 0 0 0 3px rgba(232, 163, 23, 0.35);
 }
 .tombol-utama {
     width: 100%;
@@ -155,19 +248,170 @@ input:focus, select:focus, textarea:focus {
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
+    transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
 }
-.tombol-utama:hover { background: var(--warna-utama-gelap); }
+.tombol-utama:hover { background: var(--warna-utama-gelap); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(22, 58, 71, 0.3); }
+.tombol-utama:active { transform: translateY(0); box-shadow: none; }
+.tombol-utama.memuat { opacity: 0.7; pointer-events: none; }
+
+/* Kolom password dengan tombol Lihat */
+.bungkus-sandi { position: relative; }
+.lihat-sandi {
+    position: absolute;
+    right: 6px;
+    top: 5px;
+    bottom: 6px;
+    padding: 0 10px;
+    border: none;
+    background: none;
+    color: var(--warna-utama);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
 
 /* ---------- Kotak pesan ---------- */
-.pesan { padding: 10px 12px; border-radius: 6px; font-size: 14px; margin-bottom: 14px; }
+.pesan {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 14px;
+    transition: opacity 0.3s;
+}
+.pesan.hilang { opacity: 0; }
 .pesan-error  { background: #f8dcda; color: #8a1d17; }
 .pesan-sukses { background: #d7efe0; color: #165c35; }
 .pesan-info   { background: #d9eaf3; color: #174e68; }
+.tutup-pesan {
+    flex: none;
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.6;
+    padding: 0;
+}
+.tutup-pesan:hover { opacity: 1; }
 
 /* ---------- Tampilan HP ---------- */
 @media (max-width: 640px) {
-    .bar-atas { padding: 8px 16px; }
-    .menu a { padding: 10px 10px 8px; }
-    .ringkasan-item { border-left: none; border-top: 1px solid var(--warna-garis); }
-    .ringkasan-item:first-child { border-top: none; }
+    .bar-atas { flex-wrap: wrap; padding: 10px 16px; gap: 8px; }
+    .tombol-menu { display: block; }
+    .lipatan { display: none; width: 100%; flex: none; flex-direction: column; align-items: stretch; gap: 10px; }
+    .lipatan.terbuka { display: flex; }
+    .menu { flex-direction: column; }
+    .menu a { padding: 10px 8px; border-bottom: none; border-left: 3px solid transparent; }
+    .menu a.aktif { border-left-color: var(--warna-aksen); }
+    .bar-kanan { justify-content: space-between; }
+    .sambutan { padding: 20px; }
+    .sambutan-ikon { display: none; }
 }
+
+/* Hormati pengguna yang mematikan animasi di perangkatnya */
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+}
+
+/* ---------- Foto kos sebagai latar penuh di awal dashboard ---------- */
+html { scroll-behavior: smooth; }
+body.halaman-hero { overflow-x: hidden; }
+
+/* Menu atas transparan di atas foto, jadi biru lagi setelah digulir */
+body.halaman-hero .bar-atas {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    background: transparent;
+    transition: background 0.25s, box-shadow 0.2s;
+}
+body.halaman-hero .bar-atas.bergulir { background: var(--warna-utama); }
+body.halaman-hero .isi { padding-top: 0; }
+
+.hero {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);   /* keluar dari batas lebar isi, jadi selebar layar */
+    height: 100vh;
+    min-height: 480px;
+    margin-bottom: 24px;
+    background-color: var(--warna-utama);   /* cadangan kalau foto belum ada */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px 24px;
+}
+.hero::before {                 /* lapisan biru gelap supaya tulisan putih terbaca */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(22, 58, 71, 0.55), rgba(22, 58, 71, 0.75));
+}
+.hero-isi { position: relative; z-index: 1; color: #fff; max-width: 640px; }
+.hero-isi h1 { font-size: 44px; color: #fff; margin-bottom: 8px; }
+.hero-isi p { margin: 0 0 6px; font-size: 18px; color: #e6eef1; }
+.hero-tombol {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 11px 26px;
+    background: var(--warna-aksen);
+    color: #3d2a00;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.hero-tombol:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3); }
+
+#kamar-saya { scroll-margin-top: 80px; }
+
+@media (max-width: 640px) {
+    body.halaman-hero .bar-atas { background: var(--warna-utama); }   /* di HP menu tetap berwarna */
+    .hero-isi h1 { font-size: 32px; }
+}
+
+/* ---------- Foto kos jadi latar seluruh halaman ---------- */
+body.halaman-hero { background: var(--warna-utama-gelap); }
+
+/* Foto + lapisan biru gelap, menempel di layar dan tidak ikut bergulir */
+body.halaman-hero::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+        linear-gradient(rgba(22, 58, 71, 0.60), rgba(22, 58, 71, 0.82)),
+        url('../img/kos.jpg') center / cover no-repeat;
+}
+
+/* Isi halaman di atas foto */
+body.halaman-hero .isi,
+body.halaman-hero .kaki { position: relative; z-index: 1; }
+
+/* Hero tidak punya latar sendiri lagi, ikut foto di belakang */
+body.halaman-hero .hero { background: none; }
+body.halaman-hero .hero::before { display: none; }
+
+/* Panel agak transparan supaya foto tetap terasa */
+body.halaman-hero .panel {
+    background: rgba(255, 255, 255, 0.93);
+    border-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(4px);
+}
+
+/* Footer terbaca di atas foto */
+body.halaman-hero .kaki {
+    color: #dce8ec;
+    border-top-color: rgba(255, 255, 255, 0.25);
+}
+
+a.ringkasan-item { text-decoration: none; color: inherit; }

@@ -107,5 +107,7 @@ if (isset($_POST['daftar'])) {
 
         <p class="tautan-bawah">Sudah punya akun? <a href="login.php">Masuk</a></p>
     </div>
+
+    <script src="../assets/js/script.js"></script>
 </body>
 </html>
