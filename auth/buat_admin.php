@@ -1,14 +1,14 @@
 <?php
-// FILE SEMENTARA. Buka sekali di browser untuk membuat akun admin pertama,
-// lalu HAPUS file ini. Kalau dibiarkan, orang lain bisa ikut membuat admin.
+// INI CUMA FILE SEMENTARA, buka sekali di browser terus bikin akun admin yang pertama
+// terus HAPUS file ini, soalnya kalo dibiarin, orang lain bisa ikut membuat admin.
 include "../includes/koneksi.php";
 
-// Data admin pertama. Ganti password-nya setelah login nanti.
+// ini kaya data admin pertama. terus ganti passwordnya kalo udah login
 $nama = "Administrator";
 $email = "admin@kos.com";
 $kata_sandi_asli = "admin123";
 
-// Cek dulu: jangan buat dua kali
+
 $cek = mysqli_prepare($koneksi, "SELECT id FROM users WHERE email = ?");
 mysqli_stmt_bind_param($cek, "s", $email);
 mysqli_stmt_execute($cek);
@@ -19,7 +19,7 @@ if (mysqli_num_rows($hasil_cek) > 0) {
     exit;
 }
 
-// Acak password lalu simpan akun admin
+// password diacak terus simpen di akun admin
 $kata_sandi_hash = password_hash($kata_sandi_asli, PASSWORD_DEFAULT);
 $perintah = mysqli_prepare($koneksi, "INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, 'admin')");
 mysqli_stmt_bind_param($perintah, "sss", $nama, $email, $kata_sandi_hash);

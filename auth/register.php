@@ -1,38 +1,38 @@
 <?php
 include "../includes/koneksi.php";
 
-// Tempat menaruh pesan error. Kosong artinya belum ada masalah.
+// tempat buat taro pesan error. kalo kosong artinya belum ada masalah
 $pesan_error = "";
 
-// Isi formulir disimpan di sini supaya tidak hilang kalau ada error
+// terus isi formulir disimpan di sini biar ga hilang kalau ada error
 $nama = "";
 $email = "";
 $no_hp = "";
 
-// Bagian ini jalan hanya kalau tombol Daftar diklik
+// ini jalan hanya klo tombol Daftar diklik
 if (isset($_POST['daftar'])) {
 
-    // Ambil isi formulir, spasi di pinggir dibuang
+    // ambil isi formulir, spasi di pinggir dibuang
     $nama = trim($_POST['nama']);
     $email = trim($_POST['email']);
     $no_hp = trim($_POST['no_hp']);
     $kata_sandi = $_POST['kata_sandi'];
     $ulangi_kata_sandi = $_POST['ulangi_kata_sandi'];
 
-    // Penulisan email benar?
+    // penulisan email benar?
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $pesan_error = "Penulisan email belum benar.";
 
-    // Password kependekan?
+    // password kependekan?
     } elseif (strlen($kata_sandi) < 6) {
         $pesan_error = "Password minimal 6 karakter.";
 
-    // Dua password beda?
+    // dua password beda?
     } elseif ($kata_sandi != $ulangi_kata_sandi) {
         $pesan_error = "Password dan ulangi password tidak sama.";
 
     } else {
-        // Tanya database: email ini sudah dipakai belum?
+        // tanya database: email ini sudah dipakai belum?
         $cek = mysqli_prepare($koneksi, "SELECT id FROM users WHERE email = ?");
         mysqli_stmt_bind_param($cek, "s", $email);
         mysqli_stmt_execute($cek);

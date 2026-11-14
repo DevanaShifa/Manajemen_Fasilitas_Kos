@@ -1,9 +1,9 @@
 <?php
-// Sambungkan ke database dan nyalakan session
+// sambungkan ke database dan nyalakan session
 include "../includes/koneksi.php";
 
-// Kalau sudah login, tidak perlu lihat halaman login lagi.
-// Langsung arahkan ke dashboard sesuai perannya.
+// kalo udah login, ga perlu liat halaman login lagi
+// terus langsung di arahkan ke dashboard sesuai perannya.
 if (isset($_SESSION['peran'])) {
     if ($_SESSION['peran'] == 'admin') {
         header("Location: ../admin/dashboard.php");
@@ -13,8 +13,8 @@ if (isset($_SESSION['peran'])) {
     exit;
 }
 
-// Ambil kode pesan dari alamat web (contoh: login.php?pesan=salah).
-// Kalau tidak ada, isinya kosong.
+// buat ambil kode pesan dari alamat web (contoh: login.php?pesan=salah).
+// klo gaada berarti isinya kosong.
 $pesan = isset($_GET['pesan']) ? $_GET['pesan'] : "";
 ?>
 <!DOCTYPE html>
@@ -69,14 +69,14 @@ $pesan = isset($_GET['pesan']) ? $_GET['pesan'] : "";
     </div>
 
     <script>
-        // Dijalankan saat tombol Penghuni / Admin diklik
+        // jalan pas tombol Penghuni / Admin diklik
         function pilihPeran(peran) {
-            // Simpan pilihan ke kolom tersembunyi supaya ikut terkirim
+            // simpan pilihan ke kolom tersembunyi biar ikut terkirim
             document.getElementById("peranDipilih").value = peran;
-            // Tandai tombol yang sedang dipilih
+            // tandai tombol yang sedang dipilih
             document.getElementById("tombolPenghuni").classList.toggle("aktif", peran == "penghuni");
             document.getElementById("tombolAdmin").classList.toggle("aktif", peran == "admin");
-            // Admin tidak bisa daftar sendiri, jadi tulisan daftar disembunyikan
+            // admin ga bisa daftar sendiri, jadi tulisan daftar disembunyikan
             document.getElementById("tautanDaftar").style.display = (peran == "admin") ? "none" : "block";
         }
     </script>
