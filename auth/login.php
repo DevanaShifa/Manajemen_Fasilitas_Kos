@@ -1,9 +1,9 @@
 <?php
-// "../" artinya naik satu folder (dari auth/ ke Manajemen_Fasilitas_Kos/), lalu masuk ke includes/
+// Sambungkan ke database dan nyalakan session
 include "../includes/koneksi.php";
 
-// kalau udah login, ga perlu lihat halaman login lagi
-// terus langsung arahin dashboard sesuai peran yang dipilih
+// Kalau sudah login, tidak perlu lihat halaman login lagi.
+// Langsung arahkan ke dashboard sesuai perannya.
 if (isset($_SESSION['peran'])) {
     if ($_SESSION['peran'] == 'admin') {
         header("Location: ../admin/dashboard.php");
@@ -13,8 +13,8 @@ if (isset($_SESSION['peran'])) {
     exit;
 }
 
-// ambil kode pesan dari URL (misal login.php?pesan=salah).
-// klo gaada, isinya kosong.
+// Ambil kode pesan dari alamat web (contoh: login.php?pesan=salah).
+// Kalau tidak ada, isinya kosong.
 $pesan = isset($_GET['pesan']) ? $_GET['pesan'] : "";
 ?>
 <!DOCTYPE html>
@@ -22,43 +22,45 @@ $pesan = isset($_GET['pesan']) ? $_GET['pesan'] : "";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - Kos Ndut</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/auth.css">
 </head>
-<body>
+<body class="halaman-auth">
     <div class="kartu-auth">
-        <h2>Selamat Datang</h2>
-        <p class="subjudul">Silakan login untuk melanjutkan</p>
+        <h1>Kos Ndut</h1>
+        <p class="subjudul">Masuk untuk melanjutkan</p>
 
+        <!-- Pesan yang tampil tergantung kode di alamat web -->
         <?php if ($pesan == "salah") { ?>
-            <div class="pesan pesan-error">Username atau password salah.</div>
+            <div class="pesan pesan-error">Email atau password salah.</div>
         <?php } elseif ($pesan == "peran_tidak_cocok") { ?>
             <div class="pesan pesan-error">Akun ini bukan akun untuk peran yang dipilih.</div>
         <?php } elseif ($pesan == "harus_login") { ?>
-            <div class="pesan pesan-info">Kamu harus login dulu.</div>
+            <div class="pesan pesan-info">Silakan login dulu.</div>
         <?php } elseif ($pesan == "tidak_berhak") { ?>
             <div class="pesan pesan-error">Kamu tidak punya akses ke halaman itu.</div>
         <?php } elseif ($pesan == "logout") { ?>
-            <div class="pesan pesan-sukses">Kamu berhasil logout.</div>
+            <div class="pesan pesan-sukses">Kamu sudah keluar.</div>
         <?php } elseif ($pesan == "daftar_sukses") { ?>
-            <div class="pesan pesan-sukses">Registrasi berhasil, silakan login.</div>
+            <div class="pesan pesan-sukses">Pendaftaran berhasil, silakan login.</div>
         <?php } ?>
 
+        <!-- Tombol pilihan peran -->
         <div class="tab-peran">
-            <button type="button" id="tombolUser" class="aktif" onclick="pilihPeran('user')">Penghuni</button>
+            <button type="button" id="tombolPenghuni" class="aktif" onclick="pilihPeran('penghuni')">Penghuni</button>
             <button type="button" id="tombolAdmin" onclick="pilihPeran('admin')">Admin</button>
         </div>
 
-        <!-- action="proses_login.php" tanpa "../" karena filenya satu folder -->
+        <!-- Isi formulir dikirim ke proses_login.php (satu folder, jadi tanpa ../) -->
         <form action="proses_login.php" method="POST">
-            <input type="hidden" name="peran_dipilih" id="peranDipilih" value="user">
+            <input type="hidden" name="peran_dipilih" id="peranDipilih" value="penghuni">
 
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Masukkan username" required>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
 
             <label for="kata_sandi">Password</label>
-            <input type="password" id="kata_sandi" name="kata_sandi" placeholder="Masukkan password" required>
+            <input type="password" id="kata_sandi" name="kata_sandi" required>
 
             <button type="submit" class="tombol-utama">Masuk</button>
         </form>
@@ -67,13 +69,14 @@ $pesan = isset($_GET['pesan']) ? $_GET['pesan'] : "";
     </div>
 
     <script>
-        // Ganti tab Penghuni/Admin. Nilainya disimpan di input tersembunyi
-        // supaya ikut terkirim ke proses_login.php.
+        // Dijalankan saat tombol Penghuni / Admin diklik
         function pilihPeran(peran) {
+            // Simpan pilihan ke kolom tersembunyi supaya ikut terkirim
             document.getElementById("peranDipilih").value = peran;
-            document.getElementById("tombolUser").classList.toggle("aktif", peran == "user");
+            // Tandai tombol yang sedang dipilih
+            document.getElementById("tombolPenghuni").classList.toggle("aktif", peran == "penghuni");
             document.getElementById("tombolAdmin").classList.toggle("aktif", peran == "admin");
-            // Admin tidak bisa daftar sendiri, jadi tautan daftar disembunyikan
+            // Admin tidak bisa daftar sendiri, jadi tulisan daftar disembunyikan
             document.getElementById("tautanDaftar").style.display = (peran == "admin") ? "none" : "block";
         }
     </script>

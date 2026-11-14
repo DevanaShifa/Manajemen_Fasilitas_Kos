@@ -1,0 +1,46 @@
+/* =====================================================
+   auth.css - khusus halaman login dan register
+   (dipakai bersama style.css, jadi panggil style.css dulu)
+   ===================================================== */
+
+body.halaman-auth {
+    background: var(--warna-utama-gelap);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 16px;
+}
+
+.kartu-auth {
+    background: var(--warna-panel);
+    width: 100%;
+    max-width: 380px;
+    padding: 30px 28px;
+    border-radius: 8px;
+    border-top: 5px solid var(--warna-aksen);
+}
+.kartu-auth h1 { text-align: center; font-size: 22px; }
+.kartu-auth .subjudul { text-align: center; margin: 0 0 20px; color: var(--warna-teks-redup); }
+
+/* Tombol pilihan Penghuni / Admin */
+.tab-peran {
+    display: flex;
+    border: 1px solid var(--warna-garis);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+.tab-peran button {
+    flex: 1;
+    padding: 9px;
+    border: none;
+    background: #f4f6f4;
+    color: var(--warna-teks-redup);
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+}
+.tab-peran button.aktif { background: var(--warna-utama); color: #fff; font-weight: 600; }
+
+.tautan-bawah { text-align: center; font-size: 14px; margin: 18px 0 0; color: var(--warna-teks-redup); }

@@ -1,37 +1,59 @@
 <?php
+// File ini tidak punya tampilan. Tugasnya memeriksa data login lalu mengarahkan pengguna.
 include "../includes/koneksi.php";
 
-// ambil data dari form login. terus pake POST biar password ga muncul di URL.
-$username = $_POST['username'];
+// Kalau file ini dibuka langsung lewat alamat web (bukan dari formulir), kembalikan ke login
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+    header("Location: login.php");
+    exit;
+}
+
+// Ambil isi formulir login
+$email = trim($_POST['email']);
 $kata_sandi = $_POST['kata_sandi'];
 $peran_dipilih = $_POST['peran_dipilih'];
 
-// cari pengguna berdasarkan username (prepared statement, aman dari SQL injection)
-$hasil = mysqli_query($koneksi, "SELECT * FROM pengguna WHERE username = '$username'");
+// Cari akun yang emailnya sama. Tanda ? akan diisi nilai asli di baris berikutnya,
+// supaya yang diketik pengguna tidak bisa dipakai untuk merusak database.
+$perintah = mysqli_prepare($koneksi, "SELECT * FROM users WHERE email = ?");
+mysqli_stmt_bind_param($perintah, "s", $email);
+mysqli_stmt_execute($perintah);
+$hasil = mysqli_stmt_get_result($perintah);
+$data_pengguna = mysqli_fetch_assoc($hasil);
 
-// gagal kalau username ga ada ATAU password ga cocok.
-// pesannya sengaja disamain biar orang ga bisa nebak username yang terdaftar.
-if (!$data_pengguna || !password_verify($kata_sandi, $data_pengguna['kata_sandi'])) {
+// Gagal kalau email tidak ketemu ATAU password tidak cocok.
+// Pesannya sengaja dibuat sama supaya orang tidak bisa menebak email mana yang terdaftar.
+if (!$data_pengguna || !password_verify($kata_sandi, $data_pengguna['password'])) {
     header("Location: login.php?pesan=salah");
     exit;
 }
 
-// akun benar, tapi tab yang dipilih ga sesuai peran akun
-if ($data_pengguna['peran'] != $peran_dipilih) {
+// Akun benar, tapi tombol peran yang dipilih tidak sesuai
+if ($data_pengguna['role'] != $peran_dipilih) {
     header("Location: login.php?pesan=peran_tidak_cocok");
     exit;
 }
 
-// buat klo login berhasil. ganti ID session biar aman dari "pencurian" session lama.
+// Login berhasil. Ganti nomor session supaya lebih aman.
 session_regenerate_id(true);
 
-// ini buat simpan data penting ke session, dipakai di semua halaman
-$_SESSION['id_pengguna'] = $data_pengguna['id'];
-$_SESSION['nama_lengkap'] = $data_pengguna['nama_lengkap'];
-$_SESSION['peran'] = $data_pengguna['peran'];
+// Catat data penting di session, nanti dipakai di semua halaman
+$id_pengguna = $data_pengguna['id'];
+$_SESSION['id_pengguna'] = $id_pengguna;
+$_SESSION['nama'] = $data_pengguna['nama'];
+$_SESSION['peran'] = $data_pengguna['role'];
 
-// buat arahin ke dashboard sesuai peran
-if ($data_pengguna['peran'] == 'admin') {
+// Kalau penghuni, catat juga nomor data dirinya (dibutuhkan untuk tagihan dan keluhan)
+if ($data_pengguna['role'] == 'penghuni') {
+    $cari_penghuni = mysqli_prepare($koneksi, "SELECT id FROM tenants WHERE user_id = ?");
+    mysqli_stmt_bind_param($cari_penghuni, "i", $id_pengguna);
+    mysqli_stmt_execute($cari_penghuni);
+    $data_penghuni = mysqli_fetch_assoc(mysqli_stmt_get_result($cari_penghuni));
+    $_SESSION['id_penghuni'] = $data_penghuni ? $data_penghuni['id'] : 0;
+}
+
+// Arahkan ke dashboard sesuai peran
+if ($data_pengguna['role'] == 'admin') {
     header("Location: ../admin/dashboard.php");
 } else {
     header("Location: ../user/dashboard.php");

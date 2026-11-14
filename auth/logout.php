@@ -1,7 +1,12 @@
 <?php
-session_start();      // wajib dipanggil dulu supaya bisa menghapus session yang aktif
-session_unset();      // kosongkan semua isi session
-session_destroy();    // hancurkan session-nya
+// Nyalakan session dulu, supaya bisa dihapus
+session_start();
+
+// Hapus semua data login (nama, peran, dan lainnya)
+session_unset();
+session_destroy();
+
+// Kembali ke halaman login sambil membawa pesan "sudah keluar"
 header("Location: login.php?pesan=logout");
 exit;
 ?>

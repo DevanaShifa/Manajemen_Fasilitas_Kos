@@ -1,0 +1,173 @@
+/* =====================================================
+   style.css - tampilan umum (dipakai semua halaman)
+   Mau ganti warna tema? Cukup ubah angka di bagian :root
+   ===================================================== */
+
+:root {
+    --warna-utama: #1f4e5f;        /* biru kehijauan tua, warna papan nama kos */
+    --warna-utama-gelap: #163a47;
+    --warna-aksen: #e8a317;        /* kuning, untuk penanda menu aktif */
+    --warna-latar: #eef1ee;
+    --warna-panel: #ffffff;
+    --warna-teks: #20262e;
+    --warna-teks-redup: #5f6b76;
+    --warna-garis: #d3d9d3;
+    --warna-bahaya: #b3261e;
+    --warna-sukses: #1e7a46;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--warna-teks);
+    background: var(--warna-latar);
+}
+
+a { color: var(--warna-utama); }
+h1 { font-size: 24px; margin: 0 0 4px; }
+h2 { font-size: 17px; margin: 0 0 12px; }
+
+/* ---------- Bar atas (header) ---------- */
+.bar-atas {
+    background: var(--warna-utama);
+    color: #fff;
+    padding: 0 24px;
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.bar-kiri, .bar-kanan { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.merek { font-size: 19px; font-weight: 700; letter-spacing: 0.2px; }
+.menu { display: flex; gap: 4px; }
+.menu a {
+    color: #dce8ec;
+    text-decoration: none;
+    padding: 17px 12px 14px;
+    border-bottom: 3px solid transparent;
+}
+.menu a:hover { color: #fff; }
+.menu a.aktif { color: #fff; border-bottom-color: var(--warna-aksen); }
+.nama-pengguna { font-size: 14px; color: #dce8ec; }
+.tombol-keluar {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 5px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 6px;
+}
+.tombol-keluar:hover { background: rgba(255, 255, 255, 0.15); }
+
+/* ---------- Isi halaman dan footer ---------- */
+.isi {
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 28px 16px 40px;
+    min-height: calc(100vh - 58px - 62px);
+}
+.keterangan { margin: 0 0 22px; color: var(--warna-teks-redup); }
+.kaki {
+    text-align: center;
+    padding: 20px 16px;
+    font-size: 13px;
+    color: var(--warna-teks-redup);
+    border-top: 1px solid var(--warna-garis);
+}
+
+/* ---------- Ringkasan angka: satu panel, dibagi garis tegak ---------- */
+.ringkasan {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    background: var(--warna-panel);
+    border: 1px solid var(--warna-garis);
+    border-radius: 6px;
+    margin-bottom: 24px;
+}
+.ringkasan-item { padding: 16px 18px; border-left: 1px solid var(--warna-garis); }
+.ringkasan-item:first-child { border-left: none; }
+.ringkasan-angka { font-size: 30px; font-weight: 700; line-height: 1.1; }
+.ringkasan-label { font-size: 14px; color: var(--warna-teks-redup); }
+.ringkasan-item.perlu-perhatian .ringkasan-angka { color: var(--warna-bahaya); }
+
+/* ---------- Panel isi ---------- */
+.panel {
+    background: var(--warna-panel);
+    border: 1px solid var(--warna-garis);
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+}
+.kosong { margin: 0; color: var(--warna-teks-redup); }
+
+/* ---------- Tabel ---------- */
+.bungkus-tabel { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--warna-garis); }
+th { font-weight: 600; color: var(--warna-teks-redup); }
+tr:last-child td { border-bottom: none; }
+
+/* ---------- Lencana status ---------- */
+.lencana {
+    display: inline-block;
+    padding: 1px 10px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 600;
+}
+.lencana-diterima, .lencana-belum_bayar { background: #fdf0cc; color: #7a5200; }
+.lencana-diproses, .lencana-menunggu    { background: #d9eaf3; color: #174e68; }
+.lencana-selesai, .lencana-lunas        { background: #d7efe0; color: #165c35; }
+.lencana-ditolak, .lencana-telat        { background: #f8dcda; color: #8a1d17; }
+
+/* ---------- Formulir (dipakai juga di halaman login) ---------- */
+label { display: block; font-size: 14px; color: var(--warna-teks-redup); margin-top: 10px; }
+input[type="text"], input[type="email"], input[type="password"],
+input[type="number"], input[type="date"], select, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    margin: 5px 0 6px;
+    border: 1px solid #b9c1ba;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: inherit;
+    background: #fff;
+}
+input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--warna-aksen);
+    outline-offset: 1px;
+    border-color: var(--warna-utama);
+}
+.tombol-utama {
+    width: 100%;
+    margin-top: 14px;
+    padding: 11px;
+    border: none;
+    border-radius: 6px;
+    background: var(--warna-utama);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.tombol-utama:hover { background: var(--warna-utama-gelap); }
+
+/* ---------- Kotak pesan ---------- */
+.pesan { padding: 10px 12px; border-radius: 6px; font-size: 14px; margin-bottom: 14px; }
+.pesan-error  { background: #f8dcda; color: #8a1d17; }
+.pesan-sukses { background: #d7efe0; color: #165c35; }
+.pesan-info   { background: #d9eaf3; color: #174e68; }
+
+/* ---------- Tampilan HP ---------- */
+@media (max-width: 640px) {
+    .bar-atas { padding: 8px 16px; }
+    .menu a { padding: 10px 10px 8px; }
+    .ringkasan-item { border-left: none; border-top: 1px solid var(--warna-garis); }
+    .ringkasan-item:first-child { border-top: none; }
+}
