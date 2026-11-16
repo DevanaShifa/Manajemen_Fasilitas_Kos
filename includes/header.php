@@ -20,17 +20,23 @@ $file_sekarang = basename($_SERVER['PHP_SELF']);
 // Mau menambah menu baru? Tambah satu baris array di bagian yang sesuai.
 if ($_SESSION['peran'] == 'admin') {
     $tulisan_peran = "Admin";
-        $daftar_menu = array(
+    $daftar_menu = array(
         array("Dashboard", "dashboard.php"),
+        array("Kamar", "kamar.php"),
+        array("Penghuni", "penghuni.php"),
+        array("Pembayaran", "pembayaran.php"),
         array("Fasilitas & Keluhan", "fasilitas.php")
     );
 } else {
     $tulisan_peran = "Penghuni";
     $daftar_menu = array(
         array("Dashboard", "dashboard.php"),
+        array("Kamar Saya", "kamar.php"),
+        array("Pembayaran", "pembayaran.php"),
         array("Fasilitas & Keluhan", "fasilitas.php")
     );
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="id">

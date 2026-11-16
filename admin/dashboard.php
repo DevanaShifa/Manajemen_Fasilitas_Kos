@@ -43,51 +43,27 @@ include "../includes/header.php";
     <div class="sambutan-ikon">🏠</div>
 </div>
 
-<!-- Kartu ringkasan. data-angka dipakai script.js untuk efek berhitung naik.
-    Kartu jadi merah kalau ada yang perlu ditangani admin (angkanya lebih dari 0). -->
+<?php
+// Satu kartu = array(ikon, label, angka, halaman tujuan, apakah merah kalau angkanya > 0)
+$daftar_kartu = array(
+    array("🚪", "Kamar kosong",            $jumlah_kamar_kosong,    "kamar.php",             false),
+    array("🛏️", "Kamar terisi",            $jumlah_kamar_terisi,    "kamar.php",             false),
+    array("👥", "Penghuni aktif",          $jumlah_penghuni_aktif,  "penghuni.php",          false),
+    array("📣", "Keluhan belum ditangani", $jumlah_keluhan_baru,    "fasilitas.php#keluhan", true),
+    array("🔧", "Fasilitas bermasalah",    $jumlah_fasilitas_rusak, "fasilitas.php",         true),
+    array("🧾", "Bukti bayar perlu dicek", $jumlah_bukti_menunggu,  "pembayaran.php",        true)
+);
+?>
 <div class="ringkasan">
-    <div class="ringkasan-item">
-        <div class="ikon">🚪</div>
-        <div>
-            <div class="ringkasan-angka" data-angka="<?php echo $jumlah_kamar_kosong; ?>"><?php echo $jumlah_kamar_kosong; ?></div>
-            <div class="ringkasan-label">Kamar kosong</div>
-        </div>
-    </div>
-    <div class="ringkasan-item">
-        <div class="ikon">🛏️</div>
-        <div>
-            <div class="ringkasan-angka" data-angka="<?php echo $jumlah_kamar_terisi; ?>"><?php echo $jumlah_kamar_terisi; ?></div>
-            <div class="ringkasan-label">Kamar terisi</div>
-        </div>
-    </div>
-    <div class="ringkasan-item">
-        <div class="ikon">👥</div>
-        <div>
-            <div class="ringkasan-angka" data-angka="<?php echo $jumlah_penghuni_aktif; ?>"><?php echo $jumlah_penghuni_aktif; ?></div>
-            <div class="ringkasan-label">Penghuni aktif</div>
-        </div>
-    </div>
-    <a href="keluhan.php" class="ringkasan-item <?php echo ($jumlah_keluhan_baru > 0) ? 'perlu-perhatian' : ''; ?>">
-    <div class="ikon">📣</div>
-    <div>
-        <div class="ringkasan-angka" data-angka="<?php echo $jumlah_keluhan_baru; ?>"><?php echo $jumlah_keluhan_baru; ?></div>
-        <div class="ringkasan-label">Keluhan belum ditangani</div>
-    </div>
-</a>
-    <div class="ringkasan-item <?php echo ($jumlah_fasilitas_rusak > 0) ? 'perlu-perhatian' : ''; ?>">
-        <div class="ikon">🔧</div>
-        <div>
-            <div class="ringkasan-angka" data-angka="<?php echo $jumlah_fasilitas_rusak; ?>"><?php echo $jumlah_fasilitas_rusak; ?></div>
-            <div class="ringkasan-label">Fasilitas bermasalah</div>
-        </div>
-    </div>
-    <div class="ringkasan-item <?php echo ($jumlah_bukti_menunggu > 0) ? 'perlu-perhatian' : ''; ?>">
-        <div class="ikon">🧾</div>
-        <div>
-            <div class="ringkasan-angka" data-angka="<?php echo $jumlah_bukti_menunggu; ?>"><?php echo $jumlah_bukti_menunggu; ?></div>
-            <div class="ringkasan-label">Bukti bayar perlu dicek</div>
-        </div>
-    </div>
+    <?php foreach ($daftar_kartu as $kartu) { ?>
+        <a href="<?php echo $kartu[3]; ?>" class="ringkasan-item <?php echo ($kartu[4] && $kartu[2] > 0) ? 'perlu-perhatian' : ''; ?>">
+            <div class="ikon"><?php echo $kartu[0]; ?></div>
+            <div>
+                <div class="ringkasan-angka" data-angka="<?php echo $kartu[2]; ?>"><?php echo $kartu[2]; ?></div>
+                <div class="ringkasan-label"><?php echo $kartu[1]; ?></div>
+            </div>
+        </a>
+    <?php } ?>
 </div>
 
 <!-- Daftar keluhan terbaru, ada kotak cari -->

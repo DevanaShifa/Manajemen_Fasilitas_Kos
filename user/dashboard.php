@@ -60,8 +60,8 @@ include "../includes/header.php";
     </div>
 </div>
 
-<!-- Kamar yang ditempati -->
-<div class="panel" id="kamar-saya">
+<!-- Kamar yang ditempati (bisa diklik) -->
+<a href="kamar.php" class="panel panel-link" id="kamar-saya">
     <h2>Kamar saya</h2>
     <?php if ($data_kamar) { ?>
         <p style="margin:0;">
@@ -71,12 +71,12 @@ include "../includes/header.php";
             Masuk sejak <?php echo date("d-m-Y", strtotime($data_kamar['tanggal_masuk'])); ?>.
         </p>
     <?php } else { ?>
-        <p class="kosong">Kamu belum tercatat menempati kamar. Hubungi admin kalau ini keliru.</p>
+        <p class="kosong">Kamarmu belum dicatat oleh admin. Hubungi admin untuk dicatatkan.</p>
     <?php } ?>
-</div>
+</a>
 
-<!-- Tagihan yang perlu dibayar -->
-<div class="panel">
+<!-- Tagihan yang perlu dibayar (bisa diklik) -->
+<a href="pembayaran.php" class="panel panel-link">
     <h2>Tagihan yang perlu dibayar</h2>
     <?php if (mysqli_num_rows($daftar_tagihan) == 0) { ?>
         <p class="kosong">Tidak ada tagihan yang menunggu pembayaran.</p>
@@ -93,7 +93,7 @@ include "../includes/header.php";
                     <tr>
                         <td><?php echo htmlspecialchars($tagihan['bulan']); ?></td>
                         <td>Rp <?php echo number_format($tagihan['jumlah'], 0, ',', '.'); ?></td>
-                        <td><?php echo date("d-m-Y", strtotime($tagihan['jatuh_tempo'])); ?></td>
+                        <td><?php echo $tagihan['jatuh_tempo'] ? date("d-m-Y", strtotime($tagihan['jatuh_tempo'])) : '-'; ?></td>
                         <td>
                             <?php if ($tagihan['telat'] == 1) { ?>
                                 <span class="lencana lencana-telat">Telat</span>
@@ -111,11 +111,11 @@ include "../includes/header.php";
             </table>
         </div>
     <?php } ?>
-</div>
+</a>
 
-<!-- Keluhan yang pernah dikirim -->
-<div class="panel">
-    <h2>Keluhan saya <a href="keluhan.php" style="font-size:13px; font-weight:400;">Kirim / lihat semua &rarr;</a></h2>
+<!-- Keluhan yang pernah dikirim (bisa diklik) -->
+<a href="fasilitas.php#riwayat" class="panel panel-link">
+    <h2>Keluhan saya</h2>
     <?php if (mysqli_num_rows($daftar_keluhan) == 0) { ?>
         <p class="kosong">Belum ada keluhan yang kamu kirim.</p>
     <?php } else { ?>
@@ -136,6 +136,6 @@ include "../includes/header.php";
             </table>
         </div>
     <?php } ?>
-</div>
+</a>
 
 <?php include "../includes/footer.php"; ?>

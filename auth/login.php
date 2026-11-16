@@ -16,6 +16,11 @@ if (isset($_SESSION['peran'])) {
 // buat ambil kode pesan dari alamat web (contoh: login.php?pesan=salah).
 // klo gaada berarti isinya kosong.
 $pesan = isset($_GET['pesan']) ? $_GET['pesan'] : "";
+
+// Baca cookie (kosong kalau belum pernah login atau tidak mencentang "ingat")
+$email_tersimpan = isset($_COOKIE['email_tersimpan']) ? $_COOKIE['email_tersimpan'] : "";
+$peran_terakhir = (isset($_COOKIE['peran_terakhir']) && $_COOKIE['peran_terakhir'] == 'admin') ? 'admin' : 'penghuni';
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -54,16 +59,21 @@ $pesan = isset($_GET['pesan']) ? $_GET['pesan'] : "";
 
         <!-- Isi formulir dikirim ke proses_login.php (satu folder, jadi tanpa ../) -->
         <form action="proses_login.php" method="POST">
-            <input type="hidden" name="peran_dipilih" id="peranDipilih" value="penghuni">
+    <input type="hidden" name="peran_dipilih" id="peranDipilih" value="penghuni">
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email_tersimpan); ?>" required>
 
-            <label for="kata_sandi">Password</label>
-            <input type="password" id="kata_sandi" name="kata_sandi" required>
+    <label for="kata_sandi">Password</label>
+    <input type="password" id="kata_sandi" name="kata_sandi" required>
 
-            <button type="submit" class="tombol-utama">Masuk</button>
-        </form>
+    <label style="display:flex; align-items:center; gap:8px; margin-top:12px;">
+        <input type="checkbox" name="ingat_email" <?php echo ($email_tersimpan != "") ? 'checked' : ''; ?>>
+        Ingat email saya
+    </label>
+
+    <button type="submit" class="tombol-utama">Masuk</button>
+</form>
 
         <p class="tautan-bawah" id="tautanDaftar">Belum punya akun? <a href="register.php">Daftar</a></p>
     </div>
@@ -79,6 +89,9 @@ $pesan = isset($_GET['pesan']) ? $_GET['pesan'] : "";
             // admin ga bisa daftar sendiri, jadi tulisan daftar disembunyikan
             document.getElementById("tautanDaftar").style.display = (peran == "admin") ? "none" : "block";
         }
+
+        //langsung pilih peran terakhir yang tersimpan di cookie
+        pilihPeran('<?php echo $peran_terakhir; ?>');
     </script>
 
     <script src="../assets/js/script.js"></script>

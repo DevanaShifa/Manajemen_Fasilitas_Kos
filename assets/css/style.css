@@ -415,3 +415,18 @@ body.halaman-hero .kaki {
 }
 
 a.ringkasan-item { text-decoration: none; color: inherit; }
+
+/* Kartu dan panel yang bisa diklik */
+a.ringkasan-item, a.panel-link { text-decoration: none; color: inherit; }
+a.panel-link {
+    display: block;
+    transition: transform 0.18s, box-shadow 0.18s;
+}
+a.panel-link:hover { transform: translateY(-3px); box-shadow: var(--bayangan-angkat); }
+
+/* Kartu ringkasan jadi 3 kolom, supaya 6 kartu rapi (3 + 3) */
+.ringkasan { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+
+/* Lencana status kamar */
+.lencana-kosong { background: #d7efe0; color: #165c35; }
+.lencana-terisi { background: #d9eaf3; color: #174e68; }

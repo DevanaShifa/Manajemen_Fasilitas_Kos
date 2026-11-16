@@ -37,6 +37,16 @@ if ($data_pengguna['role'] != $peran_dipilih) {
 // Login berhasil. Ganti nomor session supaya lebih aman.
 session_regenerate_id(true);
 
+// Cookie: ingat email dan tab peran terakhir, berlaku 30 hari
+$aturan_cookie = array('expires' => time() + 60 * 60 * 24 * 30, 'path' => '/', 'httponly' => true, 'samesite' => 'Lax');
+
+if (isset($_POST['ingat_email'])) {
+    setcookie('email_tersimpan', $email, $aturan_cookie);
+} else {
+    setcookie('email_tersimpan', '', time() - 3600, '/');   // tidak dicentang: hapus cookie lamanya
+}
+setcookie('peran_terakhir', $data_pengguna['role'], $aturan_cookie);
+
 // catat data penting di session, nanti dipakai di semua halaman
 $id_pengguna = $data_pengguna['id'];
 $_SESSION['id_pengguna'] = $id_pengguna;
