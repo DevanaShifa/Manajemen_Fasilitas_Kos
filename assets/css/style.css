@@ -390,7 +390,7 @@ body.halaman-hero::before {
     z-index: 0;
     background:
         linear-gradient(rgba(22, 58, 71, 0.60), rgba(22, 58, 71, 0.82)),
-        url('../img/kos.jpg') center / cover no-repeat;
+        url('../gambar/kos_ndut.webp') center / cover no-repeat;
 }
 
 /* Isi halaman di atas foto */
