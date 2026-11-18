@@ -11,10 +11,10 @@ $jenis_boleh = array('kamar', 'umum');
 $kondisi_boleh = array('baik', 'rusak', 'perbaikan');
 $status_boleh = array('diterima', 'diproses', 'selesai');
 
-//BARU: wadah buat pesan error, klo masih kosong berarti blm ada masalah
+//wadah buat pesan error, klo masih kosong berarti blm ada masalah
 $pesan_error = "";
 
-//BARU: mode buat edit: ambil data fasilitas yg mau diubah
+//mode buat edit: ambil data fasilitas yg mau diubah
 // pas tombol "Edit" diklik, alamatnya jadi fasilitas.php?edit=3
 $fasilitas_edit = null;
 if (isset($_GET['edit'])) {
@@ -71,7 +71,7 @@ if (isset($_POST['simpan_perubahan'])) {
     }
 }
 
-// 3. BARU: Hapus fasilitas (DELETE)
+// 3. Hapus fasilitas (DELETE)
 if (isset($_POST['hapus_fasilitas'])) {
     $id = (int) $_POST['id'];
 
@@ -133,7 +133,7 @@ $daftar_keluhan = mysqli_query($koneksi, "SELECT complains.id, complains.judul, 
                                           LEFT JOIN fasilities ON complains.fasilitas_id = fasilities.id
                                           ORDER BY complains.created_at DESC");
 
-//BARU: penanda "form lagi mode edit atau mode tambah?"
+// penanda "form lagi mode edit atau mode tambah?"
 //!empty(...) = true klo $fasilitas_edit ada isinya. Dipake berkali-kali di form bawah.
 $sedang_edit = !empty($fasilitas_edit);
 
@@ -145,11 +145,11 @@ $gaya_form_kecil = "display:flex; gap:6px; align-items:center;";
 <h1>Fasilitas &amp; Keluhan</h1>
 <p class="keterangan">Kelola fasilitas kos dan tanggapi keluhan penghuni di satu tempat.</p>
 
-<!-- BARU: pesannya dibedain. klo ?pesan=fasilitas_hapus tulisannya "Fasilitas dihapus.", selain itu "Perubahan disimpan." -->
+<!-- pesannya dibedain. klo ?pesan=fasilitas_hapus tulisannya "Fasilitas dihapus.", selain itu "Perubahan disimpan." -->
 <?php if (isset($_GET['pesan'])) { ?>
     <div class="pesan pesan-sukses"><?php echo ($_GET['pesan'] == 'fasilitas_hapus') ? 'Fasilitas dihapus.' : 'Perubahan disimpan.'; ?></div>
 <?php } ?>
-<!-- BARU: kotak error cuma muncul klo $pesan_error ada isinya -->
+<!-- kotak error cuma muncul klo $pesan_error ada isinya -->
 <?php if ($pesan_error != "") { ?>
     <div class="pesan pesan-error"><?php echo $pesan_error; ?></div>
 <?php } ?>
@@ -161,7 +161,7 @@ $gaya_form_kecil = "display:flex; gap:6px; align-items:center;";
     <?php } else { ?>
         <div class="bungkus-tabel">
             <table>
-                <!-- BARU: kolom Aksi ditambah di paling belakang -->
+                <!--  kolom Aksi ditambah di paling belakang -->
                 <tr><th>Fasilitas</th><th>Jenis</th><th>Keterangan</th><th>Kondisi</th><th>Aksi</th></tr>
                 <?php while ($f = mysqli_fetch_assoc($daftar_fasilitas)) { ?>
                     <tr>
@@ -179,7 +179,7 @@ $gaya_form_kecil = "display:flex; gap:6px; align-items:center;";
                                 <button type="submit" name="ubah_kondisi" class="tombol-utama" style="width:auto; margin:0; padding:8px 14px;">Simpan</button>
                             </form>
                         </td>
-                        <!-- BARU: kolom aksi (Edit dan Hapus) -->
+                        <!-- kolom aksi (Edit dan Hapus) -->
                         <td>
                             <div style="display:flex; gap:10px; align-items:center;">
                                 <!-- edit itu cuma tautan biasa ke fasilitas.php?edit=ID. #form-fasilitas bikin halaman langsung turun ke formulir -->
@@ -203,7 +203,7 @@ $gaya_form_kecil = "display:flex; gap:6px; align-items:center;";
         </div>
     <?php } ?>
 
-    <!-- BARU: satu formulir dipake buat TAMBAH dan EDIT.
+    <!-- satu formulir dipake buat TAMBAH dan EDIT.
          Bedanya cuma: klo $sedang_edit = true, kolomnya keisi data lama dan tombolnya jadi "Simpan perubahan".
          Jadi ga perlu bikin 2 formulir yg isinya hampir sama. -->
     <h2 id="form-fasilitas" style="margin-top:22px;"><?php echo $sedang_edit ? "Edit fasilitas" : "Tambah fasilitas"; ?></h2>
