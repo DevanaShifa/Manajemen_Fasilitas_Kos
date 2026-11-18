@@ -142,3 +142,79 @@ document.addEventListener("click", function (kejadian) {
         kejadian.preventDefault();
     }
 });
+
+// ---------- 9. Kolom upload foto: pratinjau dan tarik-lepas ----------
+// Cara pakai di HTML: kotak dengan id="zonaFoto", input file id="foto",
+// gambar id="fotoPratinjau", tulisan nama file id="namaFile", pesan error id="pesanFoto"
+var zonaFoto = document.getElementById("zonaFoto");
+if (zonaFoto) {
+    var inputFoto = document.getElementById("foto");
+    var pratinjau = document.getElementById("fotoPratinjau");
+    var namaFile = document.getElementById("namaFile");
+    var pesanFoto = document.getElementById("pesanFoto");
+
+    // Foto yang sudah ada dari server (kalau lagi mode edit). Disimpan buat dikembalikan kalau user batal milih.
+    var alamatAwal = pratinjau.getAttribute("src") || "";
+
+    function tampilkanFoto() {
+        var berkas = inputFoto.files[0];
+        pesanFoto.textContent = "";
+        zonaFoto.classList.remove("salah");
+
+        // Ga ada file yang dipilih (misal user klik Cancel di kotak pilih file)
+        if (!berkas) {
+            namaFile.textContent = "";
+            if (alamatAwal != "") {
+                pratinjau.src = alamatAwal;
+                zonaFoto.classList.add("ada-foto");
+            } else {
+                pratinjau.removeAttribute("src");
+                zonaFoto.classList.remove("ada-foto");
+            }
+            return;
+        }
+
+        // Cek cepat di browser biar user langsung tau salahnya.
+        // Ini cuma kemudahan buat user. Pengecekan yang beneran tetap di PHP (proses_foto).
+        if (berkas.type != "image/jpeg" && berkas.type != "image/png") {
+            pesanFoto.textContent = "Foto harus berupa JPG atau PNG.";
+            zonaFoto.classList.add("salah");
+            inputFoto.value = "";   // kosongkan pilihan yang salah
+            return;
+        }
+        if (berkas.size > 2 * 1024 * 1024) {
+            pesanFoto.textContent = "Ukuran foto maksimal 2 MB.";
+            zonaFoto.classList.add("salah");
+            inputFoto.value = "";
+            return;
+        }
+
+        // Lolos: tampilkan pratinjau. createObjectURL bikin alamat sementara buat file yang baru dipilih.
+        pratinjau.src = URL.createObjectURL(berkas);
+        zonaFoto.classList.add("ada-foto");
+        namaFile.textContent = berkas.name;
+    }
+
+    // Jalan setiap kali user milih file lewat tombol
+    inputFoto.addEventListener("change", tampilkanFoto);
+
+    // Tarik-lepas: kotak berubah warna waktu ada file ditarik di atasnya
+    ["dragenter", "dragover"].forEach(function (nama) {
+        zonaFoto.addEventListener(nama, function (kejadian) {
+            kejadian.preventDefault();   // biar browser ga langsung buka filenya di tab baru
+            zonaFoto.classList.add("tarik");
+        });
+    });
+    ["dragleave", "drop"].forEach(function (nama) {
+        zonaFoto.addEventListener(nama, function () {
+            zonaFoto.classList.remove("tarik");
+        });
+    });
+    zonaFoto.addEventListener("drop", function (kejadian) {
+        kejadian.preventDefault();
+        if (kejadian.dataTransfer.files.length > 0) {
+            inputFoto.files = kejadian.dataTransfer.files;   // masukkan file yang dilepas ke input
+            tampilkanFoto();
+        }
+    });
+}

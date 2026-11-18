@@ -43,7 +43,7 @@ $daftar_keluhan = mysqli_stmt_get_result($cari_keluhan);
 // Siapkan header halaman
 $judul_halaman = "Dashboard Penghuni";
 $pakai_hero = true;                     // menu atas transparan di atas foto
-include "../includes/header.php";
+//include "../includes/header.php";
 include "../includes/header.php";
 ?>
 

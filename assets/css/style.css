@@ -430,3 +430,51 @@ a.panel-link:hover { transform: translateY(-3px); box-shadow: var(--bayangan-ang
 /* Lencana status kamar */
 .lencana-kosong { background: #d7efe0; color: #165c35; }
 .lencana-terisi { background: #d9eaf3; color: #174e68; }
+
+/* ---------- Kolom upload foto (kotak putus-putus, ada pratinjau) ---------- */
+.zona-foto {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 6px 0 10px;
+    padding: 22px 16px;
+    border: 2px dashed #b9c1ba;
+    border-radius: 10px;
+    background: #f7f9f7;
+    color: var(--warna-teks-redup);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+.zona-foto:hover,
+.zona-foto.tarik { border-color: var(--warna-utama); background: #eef5f2; }   /* .tarik = lagi ada file ditarik ke atasnya */
+.zona-foto:focus-within { border-color: var(--warna-utama); box-shadow: 0 0 0 3px rgba(232, 163, 23, 0.35); }
+.zona-foto.salah { border-color: var(--warna-bahaya); background: #fdf1f0; }
+
+/* Input file aslinya disembunyikan (dibikin kecil banget), tapi tetap bisa difokus pakai keyboard */
+.zona-foto input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+
+.zona-ikon { font-size: 30px; line-height: 1; }
+.zona-foto strong { color: var(--warna-utama); }
+.zona-foto small { font-size: 12.5px; }
+
+/* Pratinjau foto: awalnya disembunyikan, muncul kalau ada foto (kelas .ada-foto dipasang JavaScript) */
+.foto-pratinjau {
+    display: none;
+    width: 100%;
+    max-width: 320px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.zona-foto.ada-foto .foto-pratinjau { display: block; }
+.zona-foto.ada-foto .zona-ikon,
+.zona-foto.ada-foto .teks-kosong { display: none; }
+.teks-ganti { display: none; }
+.zona-foto.ada-foto .teks-ganti { display: block; }
+
+.nama-file { font-size: 13px; color: var(--warna-teks); }
+.pesan-foto { display: block; color: var(--warna-bahaya); font-size: 13px; min-height: 18px; }
