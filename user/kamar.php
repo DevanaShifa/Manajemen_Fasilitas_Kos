@@ -25,7 +25,7 @@ include "../includes/header.php";
     <?php if ($kamar) { ?>
         <h2>Kamar <?php echo htmlspecialchars($kamar['no_kamar']); ?></h2>
         <?php if (!empty($kamar['foto'])) { ?>
-            <img src="<?php echo htmlspecialchars($kamar['foto']); ?>" alt="Foto kamar" style="max-width:100%; border-radius:8px; margin-bottom:12px;">
+            <img src="../uploads/<?php echo htmlspecialchars($kamar['foto']); ?>" alt="Foto kamar" style="max-width:100%; border-radius:8px; margin-bottom:12px;">
         <?php } ?>
         <div class="bungkus-tabel">
             <table>
