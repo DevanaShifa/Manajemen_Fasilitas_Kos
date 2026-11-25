@@ -2,8 +2,9 @@
 // nyalain session dulu, biar bisa dihapus
 session_start();
 
-// hapus semua data login (nama, peran, dan lainnya)
+// kosongin semua isi login (nama, peran, id user, dll)
 session_unset();
+// ngehancurin atau matiin ingatan loginnya sekalian biar bener2 logout
 session_destroy();
 
 //balik ke halaman login sambil bawa pesan "sudah keluar"

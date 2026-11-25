@@ -13,11 +13,15 @@ if (isset($_SESSION['peran'])) {
     exit;
 }
 
+//$_GET['pesan'] = buat baca tulisan di ujung link browser
+// Misalnya tadi dia salah password, dia dilempar balik ke login.php?pesan=salah
+// nah kode ini nangkep kata "salah" itu buat ditampilin jadi kotak merah "Email atau password salah."
 // buat ambil kode pesan dari alamat web (contoh: login.php?pesan=salah).
 // klo gaada berarti isinya kosong.
 $pesan = isset($_GET['pesan']) ? $_GET['pesan'] : "";
 
 // Baca cookie (kosong kalau belum pernah login atau tidak mencentang "ingat")
+// ? klo ada ambil isinya, : klo gaada yaudah biarin kosong
 $email_tersimpan = isset($_COOKIE['email_tersimpan']) ? $_COOKIE['email_tersimpan'] : "";
 $peran_terakhir = (isset($_COOKIE['peran_terakhir']) && $_COOKIE['peran_terakhir'] == 'admin') ? 'admin' : 'penghuni';
 
@@ -57,7 +61,10 @@ $peran_terakhir = (isset($_COOKIE['peran_terakhir']) && $_COOKIE['peran_terakhir
             <button type="button" id="tombolAdmin" onclick="pilihPeran('admin')">Admin</button>
         </div>
 
-        <!-- Isi formulir dikirim ke proses_login.php (satu folder, jadi tanpa ../) -->
+        <!-- Isi formulir dikirim ke proses_login.php (satu folder, jadi tanpa ../) 
+         method="POST">: Ini ibarat amplop tertutup (POST). 
+         pas klik tombol Masuk, semua tulisan email, password, sama pilihan peran dimasukin ke amplop itu, 
+         terus dikirim ke file sebelah yang namanya proses_login.php.-->
         <form action="proses_login.php" method="POST">
     <input type="hidden" name="peran_dipilih" id="peranDipilih" value="penghuni">
 
